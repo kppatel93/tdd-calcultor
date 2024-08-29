@@ -28,4 +28,18 @@ describe('Calculator', () => {
     fireEvent.click(button);
     expect(getByText(/Result: 6/i)).toBeInTheDocument();
   });
+
+  test('handles custom delimiters', () => {
+    const { textarea, button, getByText } = setup();
+    fireEvent.change(textarea, { target: { value: '//;\n1;2' } });
+    fireEvent.click(button);
+    expect(getByText(/Result: 3/i)).toBeInTheDocument();
+  });
+
+  test('shows error message when negative numbers are included', () => {
+    const { textarea, button, getByText } = setup();
+    fireEvent.change(textarea, { target: { value: '1,-2,3' } });
+    fireEvent.click(button);
+    expect(getByText(/Error: Negatives not allowed: -2/i)).toBeInTheDocument();
+  });
 });
